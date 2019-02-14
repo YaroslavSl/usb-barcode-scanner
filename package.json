@@ -19,14 +19,14 @@
     "url": "https://github.com/mikerovers/usb-barcode-scanner/issues"
   },
   "dependencies": {
-    "lodash": "^4.17.10",
-    "node-hid": "^0.7.2",
     "@types/lodash": "^4.14.108",
-    "@types/node-hid": "^0.7.0"
+    "@types/node-hid": "^0.7.0",
+    "lodash": "^4.17.10",
+    "node-hid": "^0.7.2"
   },
   "devDependencies": {
-    "typescript": "^2.8.3",
-    "@types/node": "^9.6.6"
+    "@types/node": "^9.6.6",
+    "typescript": "^2.8.3"
   },
   "scripts": {
     "prepublish": "npm run build",
