@@ -37,6 +37,10 @@ scanner.on('data', (data) => {
     console.log(data);
 });
 
+scanner.on('error', (error) => {
+    console.log(error);
+});
+
 scanner.startScanning();
 ```
 
