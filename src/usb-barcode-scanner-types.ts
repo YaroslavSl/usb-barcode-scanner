@@ -2,7 +2,7 @@ export interface UsbScannerOptions {
     vendorId?: number,
     productId?: number,
     path?: string,
-    sendBufferTimerOn?: boolean,
+    readBufferTimer?: boolean,
 }
 
 export interface onDataScanned {

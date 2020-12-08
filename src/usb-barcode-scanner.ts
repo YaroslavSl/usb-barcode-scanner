@@ -4,10 +4,12 @@ import { EventEmitter } from 'events';
 import { UsbScannerOptions, HidMap, onDataScanned } from './usb-barcode-scanner-types';
 import { getDevice, defaultHidMap, getDeviceByPath } from './usb-barcode-scanner-utils';
 
+const readBufferTimeout = 50;
+
 export class UsbScanner extends EventEmitter implements onDataScanned {
     hid?: HID;
     hidMap: any;
-    sendBufferTimerOn: boolean;
+    readBufferTimer: boolean;
 
     constructor(options: UsbScannerOptions, hidMap?: any) {
         super();
@@ -19,10 +21,10 @@ export class UsbScanner extends EventEmitter implements onDataScanned {
         } else if (options.vendorId && options.productId) {
             device = getDevice(options.vendorId, options.productId);
         }
-        if (options.sendBufferTimerOn === true) {
-            this.sendBufferTimerOn = true;
+        if (options.readBufferTimer === true) {
+            this.readBufferTimer = true;
         } else {
-            this.sendBufferTimerOn = false;
+            this.readBufferTimer = false;
         }
 
         if (device === undefined) {
@@ -107,12 +109,12 @@ export class UsbScanner extends EventEmitter implements onDataScanned {
                         if (timer) {
                             clearTimeout(timer);
                         }
-                        if (this.sendBufferTimerOn) {
+                        if (this.readBufferTimer) {
                             timer = setTimeout(() => {
                                     barcode = bcodeBuffer.join("");
                                     bcodeBuffer = [];
                                     this.emitDataScanned(barcode);
-                                }, 100);
+                                }, readBufferTimeout);
                         }
                     } else {
                         if (timer) {

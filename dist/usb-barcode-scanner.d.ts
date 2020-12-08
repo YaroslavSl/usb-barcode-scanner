@@ -5,7 +5,7 @@ import { UsbScannerOptions, onDataScanned } from './usb-barcode-scanner-types';
 export declare class UsbScanner extends EventEmitter implements onDataScanned {
     hid?: HID;
     hidMap: any;
-    sendBufferTimerOn: boolean;
+    readBufferTimer: boolean;
     constructor(options: UsbScannerOptions, hidMap?: any);
     private retreiveDevice;
     private retreiveDeviceByPath;
