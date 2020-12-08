@@ -1,6 +1,6 @@
 {
   "name": "usb-barcode-scanner",
-  "version": "1.0.7",
+  "version": "1.0.6",
   "description": "A typed library for using USB barcode scanners in Node.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -31,6 +31,7 @@
   "scripts": {
     "prepublish": "npm run build",
     "build": "npm run clean && tsc -p .",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "versionUp": "npm version patch && tag=$(git tag --points-at HEAD) && git push origin && git push origin \"$tag\""
   }
 }

@@ -7,6 +7,7 @@ import { getDevice, defaultHidMap, getDeviceByPath } from './usb-barcode-scanner
 export class UsbScanner extends EventEmitter implements onDataScanned {
     hid?: HID;
     hidMap: any;
+    sendBufferTimerOn: boolean;
 
     constructor(options: UsbScannerOptions, hidMap?: any) {
         super();
@@ -17,6 +18,11 @@ export class UsbScanner extends EventEmitter implements onDataScanned {
             device = this.retreiveDeviceByPath(options.path);
         } else if (options.vendorId && options.productId) {
             device = getDevice(options.vendorId, options.productId);
+        }
+        if (options.sendBufferTimerOn === true) {
+            this.sendBufferTimerOn = true;
+        } else {
+            this.sendBufferTimerOn = false;
         }
 
         if (device === undefined) {
@@ -43,13 +49,27 @@ export class UsbScanner extends EventEmitter implements onDataScanned {
     startScanning(): void {
         let bcodeBuffer: string[] = [];
         let barcode: string = '';
+        let timer: NodeJS.Timer | undefined;
 
         if (this.hid) {
             this.hid.on('data', (chunk) => {
                 if (this.hidMap[chunk[2]]) {
                     if (chunk[2] !== 40) {
                         bcodeBuffer.push(this.hidMap[chunk[2]]);
+                        if (timer) {
+                            clearTimeout(timer);
+                        }
+                        if (this.sendBufferTimerOn) {
+                            timer = setTimeout(() => {
+                                    barcode = bcodeBuffer.join("");
+                                    bcodeBuffer = [];
+                                    this.emitDataScanned(barcode);
+                                }, 100);
+                        }
                     } else {
+                        if (timer) {
+                            clearTimeout(timer);
+                        }
                         barcode = bcodeBuffer.join("");
                         bcodeBuffer = [];
 
