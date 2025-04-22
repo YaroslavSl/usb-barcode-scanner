@@ -1,14 +1,13 @@
-/// <reference types="node" />
 import { HID } from 'node-hid';
-import { EventEmitter } from 'events';
-import { UsbScannerOptions, onDataScanned } from './usb-barcode-scanner-types';
-export declare class UsbScanner extends EventEmitter implements onDataScanned {
+import { EventEmitter } from 'tsee';
+import { UsbScannerOptions, HidMap, EventsMap } from './usb-barcode-scanner-types';
+export declare class UsbScanner extends EventEmitter<EventsMap> {
     hid?: HID;
-    hidMap: any;
+    hidMap: HidMap;
     readBufferTimer: boolean;
-    constructor(options: UsbScannerOptions, hidMap?: any);
-    private retreiveDevice;
-    private retreiveDeviceByPath;
+    constructor(options: UsbScannerOptions, hidMap?: HidMap);
+    private retrieveDevice;
+    private retrieveDeviceByPath;
     startScanning(): void;
     stopScanning(): void;
     private emitDataScanned;

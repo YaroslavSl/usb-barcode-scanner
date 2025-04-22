@@ -1,19 +1,24 @@
-import { Device, devices } from 'node-hid';
+import { Device, devicesAsync, devices } from 'node-hid';
 import _ from 'lodash';
+import { HidMap } from './usb-barcode-scanner-types';
 
-export function getDevices(): Device[] {
-    return devices();
+export async function getDevices(filter?: Partial<Pick<Device, 'vendorId' | 'productId' | 'path' | 'serialNumber'>>): Promise<Device[]> {
+    const devices = await devicesAsync();
+    if (filter) {
+        return  _.filter(devices, filter) as Device[];
+    }
+    return devices;
 }
 
-export function getDevice(vendorId: number, productId: number): Device|undefined {
-    return _.find(getDevices(), { 'vendorId': vendorId, 'productId': productId });
+export function getDevice(vendorId: number, productId: number): Device | undefined {
+    return devices(vendorId, productId)[0];
 }
 
-export function getDeviceByPath(path: string): Device|undefined {
-    return _.find(getDevices(), { 'path': path });
+export function getDeviceByPath(path: string): Device | undefined {
+    return _.find(devices(), { 'path': path });
 }
 
-export function defaultHidMap(): Object {
+export function defaultHidMap(): HidMap {
     return {
         4: {
             unmodified: "a",

@@ -5,11 +5,11 @@ export interface UsbScannerOptions {
     readBufferTimer?: boolean,
 }
 
-export interface onDataScanned {
-    on(event: string, listener: Function): this;
+export type HidMap = {
+    [key in number]: { unmodified: string, shift?: string }
 }
 
-export interface HidMap {
-    code: number,
-    value: string
-}
+export type EventsMap = {
+    data: (data: string) => void;
+    error: (msg: string) => void;
+};
